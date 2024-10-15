@@ -33,7 +33,7 @@ router.get('/id', (req, res) => {
   res.json(user || {error: 'User ${id} not found'})
 })
 
-router.post('/id', (req, res) => {
+router.post('/', (req, res) => {
   const body = req.body;
   if (body.name.length > 5) {
 
@@ -55,6 +55,16 @@ router.put('/id', (req, res) => {
   }
   //garante que atualiza todas as chaves
   res.json(user || {error: 'User ${id} not found'})
+})
+
+router.delete('/id', (req, res) => {
+  const { id } = req.params
+  const user = users.find((u) => u.id ==id)
+  if (!user) {
+    return res.status(404).json({error: 'User ${id} not found'})
+  }
+  users.splice(users.indexOf(user),1)
+  res.json(204).json()
 })
 
 export { router }
