@@ -17,7 +17,7 @@ router.get('/:id', (req, res) => {
   if (!user) {
     return res.status(404).send({ message: 'ID do usuário não encontrado' });
   }
-  return res.json(user || { error: `User ${id} not found` });
+  return res.json(user);
 });
 
 router.post('/', (req, res) => {
@@ -32,20 +32,20 @@ router.put('/:id', (req, res) => {
   const { body } = req;
   const user = users.find((u) => u.id === id);
   if (!user) {
-    return res.status(404).json({ error: `User ${id} not found` });
+    return res.status(404).json({ message: `Usuário com o Id: ${id} não encontrado` });
   }
   for (const key in body) {
     user[key] = body[key];
   }
   // garante que atualiza todas as chaves
-  return res.json(user || { error: `User ${id} not found` });
+  return res.json(user);
 });
 
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
   const user = users.find((u) => u.id === id);
   if (!user) {
-    return res.status(404).json({ error: `User ${id} not found` });
+    return res.status(404).json({ message: `Usuário com o Id: ${id} não encontrado` });
   }
   users.splice(users.indexOf(user), 1);
   return res.json(204).json();
