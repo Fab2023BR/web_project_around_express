@@ -13,6 +13,13 @@ mongoose.connect('mongodb://localhost:27017/aroundb', {
   useFindAndModify: false
 });
 
+app.use((req, res, next) => {
+  req.user = {
+    _id: '671e07711cddb28412f75d63',
+  };
+  next();
+});
+
 app.use('/users', userRouter);
 app.use('/cards', cardRouter);
 

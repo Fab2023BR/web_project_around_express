@@ -1,13 +1,8 @@
 import { Router } from 'express';
-import cards from '../data/cards.json' assert { type: 'json' };
+const { getCards, createCard, deleteCard } = require('../controllers/cards');
 
-const router = Router();
-
-router.get('/', (req, res) => {
-  if (cards.error) {
-    return res.status(404).send({ message: 'Cartões não encontrado' });
-  }
-  return res.json(cards);
-});
+router.get('/cards', getCards);
+router.post('/cards', createCard);
+router.delete('/cards/:cardId', deleteCard);
 
 export default router;
