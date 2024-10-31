@@ -1,6 +1,6 @@
-const Card = require('../models/card');
+import Card from '../models/cards.js';
 
-function getCards(req, res) {
+export function getCards(req, res) {
   return Card.find({})
     .then((cards) => {
       if (!cards) {
@@ -16,7 +16,7 @@ function getCards(req, res) {
     });
 }
 
-function createCard(req, res) {
+export function createCard(req, res) {
   const { name, link } = req.body;
 
   if (!name || !link) {
@@ -44,7 +44,7 @@ function createCard(req, res) {
     });
 }
 
-function deleteCardById(req, res) {
+export function deleteCardById(req, res) {
   const { cardId } = req.params;
   return Card.deleteOne({ _id: cardId })
     .orFail(() => {
@@ -61,7 +61,7 @@ function deleteCardById(req, res) {
     });
 }
 
-function likeCard(req, res) {
+export function likeCard(req, res) {
   const { cardId } = req.params;
   const userId = req.user._id;
   return Card.findByIdAndUpdate(
@@ -89,7 +89,7 @@ function likeCard(req, res) {
     });
 }
 
-function dislikeCard(req, res) {
+export function dislikeCard(req, res) {
   const { cardId } = req.params;
   const userId = req.user._id;
   return Card.findByIdAndUpdate(
@@ -116,11 +116,3 @@ function dislikeCard(req, res) {
       res.status(err.status).send({ error: err.message });
     });
 }
-
-module.exports = {
-  getCards,
-  createCard,
-  deleteCardById,
-  likeCard,
-  dislikeCard,
-};

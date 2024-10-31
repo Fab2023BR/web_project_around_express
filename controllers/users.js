@@ -1,6 +1,6 @@
-const User = require('../models/user');
+import User from '../models/user.js';
 
-function getUsers(req, res) {
+export function getUsers(req, res) {
   return User.find({})
     .then((users) => {
       if (!users) {
@@ -16,7 +16,7 @@ function getUsers(req, res) {
     });
 }
 
-function getUserById(req, res) {
+export function getUserById(req, res) {
   const { userId } = req.params;
   return User.findById(userId)
     .orFail(() => {
@@ -33,7 +33,7 @@ function getUserById(req, res) {
     });
 }
 
-function createUser(req, res) {
+export function createUser(req, res) {
   const { name, about, avatar } = req.body;
 
   if (!name || !about || !avatar) {
@@ -59,7 +59,7 @@ function createUser(req, res) {
     });
 }
 
-function updateUserProfile(req, res) {
+export function updateUserProfile(req, res) {
   const { name, about } = req.body;
   const userId = req.user._id;
   const userUpdated = {};
@@ -92,7 +92,7 @@ function updateUserProfile(req, res) {
     });
 }
 
-function updateUserAvatar(req, res) {
+export function updateUserAvatar(req, res) {
   const { avatar } = req.body;
   const userId = req.user._id;
 
@@ -122,11 +122,3 @@ function updateUserAvatar(req, res) {
       res.status(err.status).send({ error: err.message });
     });
 }
-
-module.exports = {
-  getUsers,
-  getUserById,
-  createUser,
-  updateUserProfile,
-  updateUserAvatar,
-};
