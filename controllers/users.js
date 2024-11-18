@@ -51,6 +51,7 @@ export function createUser(req, res) {
         err.status = 500;
         throw err;
       }
+      req.user._id = user._id;
       res.send({ data: user });
     })
     .catch((err) => {
