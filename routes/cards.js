@@ -5,7 +5,7 @@ const router = Router();
 router.get('/', getCards);
 router.post('/', createCard);
 router.delete('/:cardId', deleteCardById);
-router.put('/:cardId', likeCard);
-router.delete('/:cardId', dislikeCard);
+router.put('/likes/:cardId', likeCard);
+router.delete('/likes/:cardId', dislikeCard);
 
 export default router;

@@ -1,18 +1,18 @@
-import Card from '../models/cards.js';
+import Card from "../models/cards.js";
 
 export function getCards(req, res) {
   return Card.find({})
     .then((cards) => {
       if (!cards) {
-        const err = new Error('Erro ao buscar cards');
+        const err = new Error("Erro ao buscar cards");
         err.status = 500;
         throw err;
       }
-      res.send({ data: cards });
+      return res.send({ data: cards });
     })
     .catch((err) => {
-      console.log('getCards Error:', err);
-      res.status(err.status).send({ error: err.message });
+      console.log("getCards Error:", err);
+      return res.status(err.status).send({ error: err.message });
     });
 }
 
@@ -20,7 +20,7 @@ export function createCard(req, res) {
   const { name, link } = req.body;
 
   if (!name || !link) {
-    return res.status(400).send({ error: 'Dados inválidos...' });
+    return res.status(400).send({ error: "Dados inválidos..." });
   }
 
   const newCard = {
@@ -32,15 +32,15 @@ export function createCard(req, res) {
   return Card.create(newCard)
     .then((card) => {
       if (!card) {
-        const err = new Error('Erro ao criar card');
+        const err = new Error("Erro ao criar card");
         err.status = 500;
         throw err;
       }
-      res.send({ data: card });
+      return res.send({ data: card });
     })
     .catch((err) => {
-      console.log('createCard Error:', err);
-      res.status(err.status).send({ error: err.message });
+      console.log("createCard Error:", err);
+      return res.status(err.status).send({ error: err.message });
     });
 }
 
@@ -48,23 +48,24 @@ export function deleteCardById(req, res) {
   const { cardId } = req.params;
   return Card.deleteOne({ _id: cardId })
     .orFail(() => {
-      const err = new Error('Erro ao deletar este card');
+      const err = new Error("Erro ao deletar este card");
       err.status = 400;
       throw err;
     })
     .then(() => {
-      res.send({ message: 'Card deletado com sucesso' });
+      return res.send({ message: "Card deletado com sucesso" });
     })
     .catch((err) => {
-      console.log('deleteCardById Error:', err);
-      res.status(err.status).send({ error: err.message });
+      console.log("deleteCardById Error:", err);
+      return res.status(err.status).send({ error: err.message });
     });
 }
 
 export function likeCard(req, res) {
   const { cardId } = req.params;
   const userId = req.user._id;
-  return Card.findByIdAndUpdate(
+
+  Card.findByIdAndUpdate(
     cardId,
     {
       $addToSet: {
@@ -73,19 +74,19 @@ export function likeCard(req, res) {
     },
     {
       new: true,
-    },
+    }
   )
     .orFail(() => {
-      const err = new Error('Card não encontrado');
+      const err = new Error("Card não encontrado");
       err.status = 404;
       throw err;
     })
-    .then(() => {
-      res.send({ message: 'Like com sucesso' });
+    .then((card) => {
+      return res.send({ message: "Like com sucesso", card });
     })
     .catch((err) => {
-      console.log('likeCard Error:', err);
-      res.status(err.status).send({ error: err.message });
+      console.log("likeCard Error:", err);
+      return res.status(err.status).send({ error: err.message });
     });
 }
 
@@ -101,18 +102,18 @@ export function dislikeCard(req, res) {
     },
     {
       new: true,
-    },
+    }
   )
     .orFail(() => {
-      const err = new Error('Card não encontrado');
+      const err = new Error("Card não encontrado");
       err.status = 404;
       throw err;
     })
-    .then(() => {
-      res.send({ message: 'Dislike com sucesso' });
+    .then((card) => {
+      return res.send({ message: "Like com sucesso", card });
     })
     .catch((err) => {
-      console.log('dislikeCard Error:', err);
-      res.status(err.status).send({ error: err.message });
+      console.log("dislikeCard Error:", err);
+      return res.status(err.status).send({ error: err.message });
     });
 }

@@ -62,6 +62,7 @@ export function createUser(req, res) {
 
 export function updateUserProfile(req, res) {
   const { name, about } = req.body;
+  console.log(name, about)
   const userId = req.user._id;
   const userUpdated = {};
 
@@ -104,22 +105,22 @@ export function updateUserAvatar(req, res) {
   return User.findByIdAndUpdate(
     userId,
     {
-      avatar,
+      $set: { avatar: avatar.avatar }, // Use $set para campos únicos
     },
     {
       new: true,
     },
-  )
-    .orFail(() => {
+  ).orFail(() => {
       const err = new Error('Usuário não encontrado');
       err.status = 404;
       throw err;
     })
     .then((user) => {
-      res.send({ data: user });
+      console.log(user);
+      return res.send({ data: user });
     })
     .catch((err) => {
       console.log('updateUserAvatar Error:', err);
-      res.status(err.status).send({ error: err.message });
+      return res.status(err.status).send({ error: err.message });
     });
 }
